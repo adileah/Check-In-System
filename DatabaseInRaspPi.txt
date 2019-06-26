@@ -1,0 +1,51 @@
+In Command Line:
+
+>>>>Download mysql
+
+pi@raspberrypi:~ $ sudo apt-get install mysql-server
+
+<<<<
+
+>>>> Password Fix
+Doesn’t prompt password input as it should, pressing enter does not work.
+(Set password to “iucheckin” to make uniform.)
+Code to fix this:
+
+sudo mysqld_safe --skip-grant-tables&
+sudo mysql --user=root mysql
+MariaDB [(none)]> update user set authentication_string=PASSWORD('iucheckin') where user='root';
+MariaDB [(none)]> flush privileges;
+MariaDB [(none)]> quit
+pi@raspberrypi:~ $ sudo service mysql restart
+
+<<<<
+>>>> Access mysql
+pi@raspberrypi:~ $ sudo mysql -u root -p
+>>>>
+Notes:
+It will ask for a password: you should have created it to be ‘iucheckin’
+Replace root with admin once you’ve created an admin
+If it ever gives you an indent and  -> then you forgot to use a ‘;’ so do that now.
+<<<<
+<<<<
+
+>>>> Create the database
+(Use uniform CheckIn name for database)
+
+MariaDB [(none)]> create database CheckIn;
+
+>>>> Create Admin for database
+
+MariaDB [(none)]> CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin';
+MariaDB [(none)]> grant all privileges on CheckIn.* to ‘admin’@’localhost’;
+MariaDB [(none)]> flush privileges;
+MariaDB [(none)]> quit
+
+>>>> Adding tables in your database
+
+MariaDB [(none)]> use CheckIn
+MariaDB [(CheckIn)]> create table yourtablename(column1 TYPE, column2 TYPE, column3 TYPE);
+
+<<<< 
+
+For more help on database commands use: http://g2pc1.bu.edu/~qzpeng/manual/MySQL%20Commands.htm
